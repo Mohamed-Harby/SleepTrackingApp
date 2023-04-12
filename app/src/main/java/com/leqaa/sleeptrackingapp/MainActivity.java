@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
-    private SensorEventListener selg;
+    private SensorEventListener selg; // sensor event listener for gyroscope
     private SensorEventListener sela;
     private TextView gyroscopeReading;
     private TextView accelerometerReading;
