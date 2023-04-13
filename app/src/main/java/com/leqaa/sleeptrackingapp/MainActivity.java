@@ -29,13 +29,13 @@ public class MainActivity extends AppCompatActivity {
         gyroscope=sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         accelerometer=sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        gyroscopeReading=(TextView) findViewById(R.id.gyroscopeReading);
-        accelerometerReading=(TextView) findViewById(R.id.accelerometerReading);
+//        gyroscopeReading=(TextView) findViewById(R.id.gyroscopeReading);
+//        accelerometerReading=(TextView) findViewById(R.id.accelerometerReading);
 
         selg=new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
-                gyroscopeReading.setText(String.valueOf(event.values[1]));
+//                gyroscopeReading.setText(String.valueOf(event.values[1]));
             }
 
             @Override
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         sela=new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
-                accelerometerReading.setText(String.valueOf(event.values[0]));
+//                accelerometerReading.setText(String.valueOf(event.values[0]));
             }
 
             @Override

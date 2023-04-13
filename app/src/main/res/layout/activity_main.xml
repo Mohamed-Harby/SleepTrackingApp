@@ -4,27 +4,138 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:background="@color/background"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_marginVertical="20dp"
+        android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/gyroscopeReading"
+        <RelativeLayout
+            android:id="@+id/accuracy_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="gyroscope"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginVertical="40dp"
+            android:background="@drawable/rounded_corner"
+            android:minWidth="300dp"
+            android:minHeight="170dp"
+            android:padding="10dp">
 
-        <TextView
-            android:id="@+id/accelerometerReading"
+            <TextView
+                android:id="@+id/accuracy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/accuracy"
+                android:textColor="@color/text_color"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/accuracy_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/accuracy"
+                android:text="placeholder"
+                android:layout_marginTop="30dp"
+                android:textSize="30dp"
+                android:textColor="@color/text_color"
+                app:layout_constraintStart_toStartOf="parent" />
+            <ProgressBar
+                android:id="@+id/accuracy_progress"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/accuracy_result"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rounded_corner"
+                android:minWidth="260dp"
+                android:minHeight="5dp"
+                android:orientation="horizontal"
+                android:progress="20"
+                android:progressBackgroundTint="@color/text_color"
+                android:progressTint="@color/background" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/duration_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="accelerometer" />
+            android:layout_marginVertical="40dp"
+            android:background="@drawable/rounded_corner1"
+            android:minWidth="300dp"
+            android:minHeight="170dp"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/duration"
+                android:textColor="@color/text_color"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/duration_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/duration"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:textSize="30dp"
+                android:text="placeholder"
+                android:textColor="@color/text_color"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/duration_progress"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/duration_result"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rounded_corner"
+                android:minWidth="260dp"
+                android:minHeight="5dp"
+                android:orientation="horizontal"
+                android:progress="50"
+                android:progressBackgroundTint="@color/text_color"
+                android:progressTint="@color/background" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/start_tracking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/rounded_corner2"
+            android:minWidth="200dp"
+            android:minHeight="60dp"
+            android:shadowColor="#BD3F3F"
+            android:text="@string/start_tracking"
+            android:textColor="@color/background"
+            app:rippleColor="@color/teal_200"
+            app:strokeColor="#C30C0C" />
+
     </LinearLayout>
 
 </RelativeLayout>
