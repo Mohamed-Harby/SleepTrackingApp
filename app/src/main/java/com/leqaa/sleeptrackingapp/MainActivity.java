@@ -12,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.widget.TextView;
 
+import DataAccess.AvgSensorReadingRepository;
+import DataAccess.SqliteManager;
+import Models.AvgSensorReading;
+
 public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
     private SensorEventListener selg; // sensor event listener for gyroscope
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView accelerometerReading;
     private Sensor gyroscope ;
     private Sensor accelerometer;
+    private AvgSensorReadingRepository avgSensorReadingRepository;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +33,15 @@ public class MainActivity extends AppCompatActivity {
 
         gyroscope=sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         accelerometer=sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        avgSensorReadingRepository=new AvgSensorReadingRepository(this);
+        avgSensorReadingRepository.Create(new AvgSensorReading(2.1,"hello world"));
+        System.out.println("================================");
+        for (AvgSensorReading avgSensorReading:avgSensorReadingRepository.ReadAll()
+             ) {
+            System.out.println(avgSensorReading.sensorReading);
+            System.out.println(avgSensorReading.dateTime);
+
+        }
 
 //        gyroscopeReading=(TextView) findViewById(R.id.gyroscopeReading);
 //        accelerometerReading=(TextView) findViewById(R.id.accelerometerReading);
