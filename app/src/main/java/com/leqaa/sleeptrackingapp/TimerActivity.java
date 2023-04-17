@@ -41,7 +41,7 @@ public class TimerActivity extends AppCompatActivity {
         super.setContentView(R.layout.activity_timer);
 
         timerValue = findViewById(R.id.time_value);
-        durationQualityRepository=new DurationQualityRepository(this);
+        durationQualityRepository = new DurationQualityRepository(this);
         avgSensorReadingRepository = new AvgSensorReadingRepository(this);
         sensorTimer = new Timer();
         timer = new Timer();
@@ -89,8 +89,8 @@ public class TimerActivity extends AppCompatActivity {
             timer.cancel();
             sensorTimer.cancel();
             Intent intent = new Intent(TimerActivity.this, MainActivity.class);
-            int quality= getQuality();
-            durationQualityRepository.create(new DurationQuality(hours, minutes, quality));
+            double quality = getQuality();
+            durationQualityRepository.create(new DurationQuality(hours, minutes, (int)quality));
             intent.putExtra("hours", hours);
             intent.putExtra("minutes", minutes);
             intent.putExtra("quality", quality);
@@ -103,41 +103,48 @@ public class TimerActivity extends AppCompatActivity {
         double maxValue = avgSensorReadingRepository.getMax().sensorReading;
         double minValue = avgSensorReadingRepository.getMin().sensorReading;
         double sub = maxValue - minValue;
-        double threshold = (sub / 13) + minValue;
-        int underThresholdCount = 0;
+//        double threshold = 10;
+        int aboveThresholdCount = 0;
         List<AvgSensorReading> readings = avgSensorReadingRepository.ReadAll();
         int fullCount = readings.size();
+        double sum=0;
         for (AvgSensorReading reading : readings) {
-            if (reading.sensorReading <= threshold) {
-                underThresholdCount++;
-            }
+            sum+= (reading.sensorReading - minValue) / sub;
         }
-        System.out.println("threshold  =  "+threshold);
-        System.out.println("result = "+ ((underThresholdCount*100 / fullCount) ));
-        return (int) ((underThresholdCount*100 / fullCount));
+        System.out.println("max value ==============" + maxValue);
+        System.out.println("min value ==============" + minValue);
+        System.out.println("sub value ==============" + sub);
+        //print sum
+        System.out.println("sum value ==============" + sum);
+        System.out.println("above threshold count ==============" + aboveThresholdCount);
+        System.out.println("full count ==============" + fullCount);
+//        System.out.println("threshold  =  " + threshold);
+        int result =(int) ((sum / (double)fullCount)*100.00000);
+        System.out.println(result);
+        return 100-result;
 
     }
 
     @Override
     protected void onStart() {
         timer.scheduleAtFixedRate(timerTask, 1000, 1000);
-        sensorTimer.scheduleAtFixedRate(sensorTimerTask, 1000, 500);
+        sensorTimer.scheduleAtFixedRate(sensorTimerTask, 1000, 5 * 1000);
 
         sensorManager.registerListener(new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
                 double x = event.values[0];
                 double y = event.values[1];
-                double z = event.values[2];
+//                double z = event.values[2];
 
-                sensorReadings.add((float) Math.sqrt(x * x + y * y + z * z));
+                sensorReadings.add((float) (Math.abs(x)  + Math.abs(y) ));
             }
 
             @Override
             public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
             }
-        }, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        }, accelerometer, SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
         super.onStart();
     }
 }
