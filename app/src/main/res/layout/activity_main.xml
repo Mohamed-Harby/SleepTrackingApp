@@ -29,7 +29,7 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/accuracy"
+                android:id="@+id/quality"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/accuracy"
@@ -40,21 +40,21 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/accuracy_result"
+                android:id="@+id/quality_result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/accuracy"
+                android:layout_below="@+id/quality"
                 android:layout_marginTop="30dp"
                 android:text="placeholder"
                 android:textColor="@color/text_color"
                 android:textSize="30sp"
                 app:layout_constraintStart_toStartOf="parent" />
             <ProgressBar
-                android:id="@+id/accuracy_progress"
+                android:id="@+id/quality_progress"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/accuracy_result"
+                android:layout_below="@+id/quality_result"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="5dp"

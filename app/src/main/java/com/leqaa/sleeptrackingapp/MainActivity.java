@@ -1,5 +1,6 @@
 package com.leqaa.sleeptrackingapp;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,55 +10,88 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import DataAccess.AvgSensorReadingRepository;
-import DataAccess.SqliteManager;
-import Models.AvgSensorReading;
+import DataAccess.DurationQualityRepository;
+import Models.DurationQuality;
 
 public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
-    private SensorEventListener selg; // sensor event listener for gyroscope
     private SensorEventListener sela;
-    private TextView gyroscopeReading;
-    private TextView accelerometerReading;
-    private Sensor gyroscope ;
+    private TextView qualityValue;
+    private TextView durationValue;
+    private Button startTrackingBtn;
+    private ProgressBar qualityProgressBar;
+    private ProgressBar durationProgressBar;
     private Sensor accelerometer;
     private AvgSensorReadingRepository avgSensorReadingRepository;
+    private DurationQualityRepository durationQualityRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_main);
-        sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
 
-        gyroscope=sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        accelerometer=sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        avgSensorReadingRepository=new AvgSensorReadingRepository(this);
-        avgSensorReadingRepository.Create(new AvgSensorReading(2.1,"hello world"));
-        System.out.println("================================");
-        for (AvgSensorReading avgSensorReading:avgSensorReadingRepository.ReadAll()
-             ) {
-            System.out.println(avgSensorReading.sensorReading);
-            System.out.println(avgSensorReading.dateTime);
+        durationQualityRepository=new DurationQualityRepository(this);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        qualityValue = findViewById(R.id.quality_result);
+        durationValue = findViewById(R.id.duration_result);
+        startTrackingBtn = findViewById(R.id.start_tracking);
+        qualityProgressBar = findViewById(R.id.quality_progress);
+        durationProgressBar=findViewById(R.id.duration_progress);
+
+        Bundle bundle = getIntent().getExtras();
+        System.out.println(bundle);
+        if (bundle != null) {
+            int quality = bundle.getInt("quality");
+            int hours = bundle.getInt("hours");
+            int minutes = bundle.getInt("minutes");
+            LocalTime time = LocalTime.of(hours, minutes);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            String formattedTime = time.format(formatter);
+            durationValue.setText(formattedTime);
+            qualityValue.setText(quality+"%");
+            qualityProgressBar.setProgress(quality);
+            int allMinutes=hours*60+minutes;
+            if(allMinutes>480)
+                durationProgressBar.setProgress(100);
+            else
+                durationProgressBar.setProgress(allMinutes*100/480);
+        }
+        else{
+            DurationQuality durationQuality = durationQualityRepository.readLast();
+            int hours = durationQuality.hours;
+            int minutes = durationQuality.minutes;
+            LocalTime time = LocalTime.of(hours, minutes);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            String formattedTime = time.format(formatter);
+            qualityValue.setText(durationQuality.quality+"%");
+            durationValue.setText(formattedTime);
+            qualityProgressBar.setProgress(durationQuality.quality);
+            int allMinutes=hours*60+minutes;
+            if(allMinutes>480)
+                durationProgressBar.setProgress(100);
+            else
+                durationProgressBar.setProgress(allMinutes*100/480);
 
         }
+        startTrackingBtn.setOnClickListener(v -> {
+            sensorManager.registerListener(sela, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            Intent intent = new Intent(MainActivity.this, TimerActivity.class);
+            startActivity(intent);
+        });
 
-//        gyroscopeReading=(TextView) findViewById(R.id.gyroscopeReading);
-//        accelerometerReading=(TextView) findViewById(R.id.accelerometerReading);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        avgSensorReadingRepository = new AvgSensorReadingRepository(this);
 
-        selg=new SensorEventListener() {
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-//                gyroscopeReading.setText(String.valueOf(event.values[1]));
-            }
-
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-                System.out.println("hello world!");
-            }
-        };
-        sela=new SensorEventListener() {
+        sela = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
 //                accelerometerReading.setText(String.valueOf(event.values[0]));
@@ -69,19 +103,17 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
+
     @Override
-    public void onResume(){
-        sensorManager.registerListener(selg,gyroscope,SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(sela,accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
+    public void onResume() {
         super.onResume();
     }
+
     @Override
-    public void onPause(){
-        sensorManager.unregisterListener(selg,gyroscope);
-        sensorManager.unregisterListener(sela,accelerometer);
+    public void onPause() {
+        sensorManager.unregisterListener(sela, accelerometer);
         super.onPause();
     }
-
 
 
 }
