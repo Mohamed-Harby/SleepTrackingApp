@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/quality"
                 android:layout_marginTop="30dp"
-                android:text="placeholder"
+                android:text="25%"
                 android:textColor="@color/text_color"
                 android:textSize="30sp"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -98,7 +98,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="30dp"
-                android:text="placeholder"
+                android:text="07:23"
                 android:textColor="@color/text_color"
                 android:textSize="30sp"
                 app:layout_constraintStart_toStartOf="parent" />

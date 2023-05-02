@@ -23,7 +23,6 @@ import Models.DurationQuality;
 
 public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
-
     private TextView qualityValue;
     private TextView durationValue;
     private Button startTrackingBtn;
@@ -46,25 +45,25 @@ public class MainActivity extends AppCompatActivity {
         qualityProgressBar = findViewById(R.id.quality_progress);
         durationProgressBar=findViewById(R.id.duration_progress);
 
-        Bundle bundle = getIntent().getExtras();
-        System.out.println(bundle);
-        if (bundle != null) {
-            double quality = bundle.getDouble("quality");
-            int hours = bundle.getInt("hours");
-            int minutes = bundle.getInt("minutes");
-            LocalTime time = LocalTime.of(hours, minutes);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            String formattedTime = time.format(formatter);
-            durationValue.setText(formattedTime);
-            qualityValue.setText((int)quality+"%");
-            qualityProgressBar.setProgress((int)quality);
-            int allMinutes=hours*60+minutes;
-            if(allMinutes>480)
-                durationProgressBar.setProgress(100);
-            else
-                durationProgressBar.setProgress(allMinutes*100/480);
-        }
-        else{
+//        Bundle bundle = getIntent().getExtras();
+//        System.out.println(bundle);
+//        if (bundle != null) {
+//            double quality = bundle.getDouble("quality");
+//            int hours = bundle.getInt("hours");
+//            int minutes = bundle.getInt("minutes");
+//            LocalTime time = LocalTime.of(hours, minutes);
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+//            String formattedTime = time.format(formatter);
+//            durationValue.setText(formattedTime);
+//            qualityValue.setText((int)quality+"%");
+//            qualityProgressBar.setProgress((int)quality);
+//            int allMinutes=hours*60+minutes;
+//            if(allMinutes>480)
+//                durationProgressBar.setProgress(100);
+//            else
+//                durationProgressBar.setProgress(allMinutes*100/480);
+//        }
+//        else{
             DurationQuality durationQuality = durationQualityRepository.readLast();
             int hours = durationQuality.hours;
             int minutes = durationQuality.minutes;
@@ -78,9 +77,9 @@ public class MainActivity extends AppCompatActivity {
             if(allMinutes>480)
                 durationProgressBar.setProgress(100);
             else
-                durationProgressBar.setProgress(allMinutes*100/480);
+                durationProgressBar.setProgress(allMinutes*60/480);
 
-        }
+//        }
         startTrackingBtn.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, TimerActivity.class);
             startActivity(intent);

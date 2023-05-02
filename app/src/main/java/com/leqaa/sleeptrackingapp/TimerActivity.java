@@ -80,9 +80,7 @@ public class TimerActivity extends AppCompatActivity {
             }
         };
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
-
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         stopTrackingButton = findViewById(R.id.stop_tracking);
 
         stopTrackingButton.setOnClickListener(v -> {
@@ -91,10 +89,6 @@ public class TimerActivity extends AppCompatActivity {
             Intent intent = new Intent(TimerActivity.this, MainActivity.class);
             double quality = getQuality();
             durationQualityRepository.create(new DurationQuality(hours, minutes, (int)quality));
-            intent.putExtra("hours", hours);
-            intent.putExtra("minutes", minutes);
-            intent.putExtra("quality", quality);
-
             startActivity(intent);
         });
     }
@@ -144,7 +138,7 @@ public class TimerActivity extends AppCompatActivity {
             public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
             }
-        }, accelerometer, SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
+        }, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         super.onStart();
     }
 }
